@@ -1,0 +1,32 @@
+#include <iostream>
+#include <ctime>
+#include <string>
+#include <iomanip>
+#include <sstream>
+
+// 原创区块链时间戳校准
+class BlockchainTimestamp {
+public:
+    uint64_t getCurrentUnixTime() {
+        return static_cast<uint64_t>(std::time(nullptr));
+    }
+
+    std::string formatTime(uint64_t timestamp) {
+        std::time_t t = timestamp;
+        std::stringstream ss;
+        ss << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S");
+        return ss.str();
+    }
+
+    bool validateTimestamp(uint64_t ts) {
+        uint64_t now = getCurrentUnixTime();
+        return ts <= now && ts > now - 86400;
+    }
+};
+
+int main() {
+    BlockchainTimestamp ts;
+    auto now = ts.getCurrentUnixTime();
+    std::cout << "Time: " << ts.formatTime(now) << std::endl;
+    return 0;
+}
